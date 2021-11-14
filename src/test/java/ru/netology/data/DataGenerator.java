@@ -19,8 +19,7 @@ public class DataGenerator {
             Faker faker = new Faker(new Locale("ru"));
             return new PersonalDeliveryData(
                     faker.address().city(),
-                    (faker.name().firstName() + " " + faker.name().lastName()).replaceAll("Ё", "Е")
-                            .replaceAll("ё", "е"),
+                    faker.name().firstName() + " " + faker.name().lastName(),
                     faker.phoneNumber().phoneNumber());
         }
 
@@ -34,6 +33,15 @@ public class DataGenerator {
             String[] validCity = {"Москва", "Санкт-Петербург", "Майкоп", "Горно-Алтайск", "Уфа", "Улан-Удэ",
                     "Калининград", "Салехард", "Тверь", "Екатеринбург"};
             return validCity[rand];
+        }
+
+        public static String specificCyrillicLetterInName() {
+            return "Семён Семёнов";
+        }
+
+        public static String invalidName() {
+            Faker faker = new Faker(new Locale("en"));
+            return faker.name().fullName();
         }
 
         public static String invalidCity() {

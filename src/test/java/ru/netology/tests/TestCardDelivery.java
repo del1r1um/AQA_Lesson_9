@@ -10,6 +10,7 @@ import ru.netology.data.DataGenerator;
 import ru.netology.data.PersonalDeliveryData;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static ru.netology.data.DataGenerator.DeliveryData.*;
 
@@ -55,6 +56,19 @@ class TestCardDelivery {
 
     @Test
     @Severity(SeverityLevel.NORMAL)
+    void shouldRSendFormWithSpecificCyrillicLetterInName() {
+        $("[data-test-id='city'] .input__control").setValue(validCity());
+        $("[data-test-id='date'] .input__control").doubleClick()
+                .sendKeys(Keys.DELETE, generateDate(7));
+        $("[data-test-id='name'] .input__control").setValue(specificCyrillicLetterInName());
+        $("[data-test-id='phone'] .input__control").setValue(data.getPhoneNumber());
+        $(".checkbox__box").click();
+        $(".button__text").click();
+        $("[data-test-id='name'].input_invalid").shouldNotBe(visible);
+    }
+
+    @Test
+    @Severity(SeverityLevel.NORMAL)
     void shouldSendFormWithEmptyCityField() {
         $("[data-test-id='date'] .input__control").doubleClick()
                 .sendKeys(Keys.DELETE, generateDate(7));
@@ -71,7 +85,7 @@ class TestCardDelivery {
         $("[data-test-id='city'] .input__control").setValue(validCity());
         $("[data-test-id='date'] .input__control").doubleClick()
                 .sendKeys(Keys.DELETE, generateDate(7));
-        $("[data-test-id='name'] .input__control").setValue("Ivan Ivanov");
+        $("[data-test-id='name'] .input__control").setValue(invalidName());
         $("[data-test-id='phone'] .input__control").setValue(data.getPhoneNumber());
         $(".checkbox__box").click();
         $(".button__text").click();
@@ -138,6 +152,6 @@ class TestCardDelivery {
         $("[data-test-id='phone'] .input__control").setValue(data.getPhoneNumber());
         $(".checkbox__box").click();
         $(".button__text").click();
-        $("[data-test-id='city'] .input__sub").shouldHave(text("Доставка в выбранный город не доступна"));
+        $("[data-test-id='city'] .input__sub").shouldHave(text("Доставка в выбранный город недоступна"));
     }
 }
